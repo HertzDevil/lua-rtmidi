@@ -106,8 +106,10 @@ int RtMidiIn_getmessage(lua_State *L) {
 	auto &self = getRtMidiIn(L, 1);
 	auto msg = std::vector<unsigned char> { };
 	double dt = self.getMessage(&msg);
-	auto n = msg.size();
+	if (dt == 0.0)
+		return 0;
 
+	auto n = msg.size();
 	lua_pushnumber(L, dt);
 	lua_createtable(L, n, 0);
 	for (std::size_t i = 0; i < n; ++i) {
@@ -125,7 +127,6 @@ const luaL_Reg RtMidiIn_mt_index[] = {
 	// method wrappers
 	METHOD(getcurrentapi),
 	METHOD(setcallback),
-//	METHOD(cancelcallback),
 	METHOD(ignoretypes),
 	METHOD(getmessage),
 
