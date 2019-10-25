@@ -257,10 +257,6 @@ int RtMidi_register(lua_State *L) {
 	return 1;
 }
 
-extern "C" {
-
-__declspec(dllexport) int luaopen_luartmidi_rtmidi(lua_State *L) {
+int luaopen_luartmidi_rtmidi(lua_State *L) {
 	return RtMidi_register(L);
-}
-
 }

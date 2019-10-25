@@ -2,12 +2,20 @@
 
 #include <cstddef>
 #include <lua.hpp>
+#include "config.hpp"
 
 // std::size
 template <typename T, std::size_t N>
 constexpr std::size_t ARRAY_SIZE(const T (&)[N]) noexcept {
 	return N;
 }
+
+#if LUA_VERSION_NUM >= 502
+inline LUA_RTMIDI_LOCAL int luaL_typerror(lua_State *L, int narg, const char *tname) {
+	const char *msg = lua_pushfstring(L, "%s expected, got %s", tname, luaL_typename(L, narg));
+	return luaL_argerror(L, narg, msg);
+}
+#endif
 
 // [-1, +0, e]
 template <typename T>
@@ -42,17 +50,10 @@ T &luaGetUserdata(lua_State *L, int index, const char *tname) {
 // [-0, +1, m]
 template <std::size_t N>
 void luaNewLib(lua_State *L, const luaL_Reg (&funcs)[N]) {
-#if LUA_VERSION_NUM >= 503
+#if LUA_VERSION_NUM >= 502
 	luaL_newlib(L, funcs);
 #else
 	lua_createtable(L, 0, N - 1);
 	luaL_register(L, nullptr, funcs);
 #endif
 }
-
-#if LUA_VERSION_NUM >= 502
-inline int luaL_typerror(lua_State *L, int narg, const char *tname) {
-	const char *msg = lua_pushfstring(L, "%s expected, got %s", tname, luaL_typename(L, narg));
-	return luaL_argerror(L, narg, msg);
-}
-#endif

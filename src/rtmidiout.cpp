@@ -169,12 +169,8 @@ int RtMidiOut_register(lua_State *L) {
 	return 1;
 }
 
-extern "C" {
-
-__declspec(dllexport) int luaopen_luartmidi_rtmidiout(lua_State *L) {
+int luaopen_luartmidi_rtmidiout(lua_State *L) {
 	lua_pop(L, ChannelOut_register(L));
 	lua_pop(L, RtMidi_register(L));
 	return RtMidiOut_register(L);
-}
-
 }

@@ -2,10 +2,11 @@
 
 #include <lua.hpp>
 #include <RtMidi.h>
+#include "config.hpp"
 
 constexpr const char MT_CHANNELOUT[] = "luartmidi.channelout";
 
-struct ChannelOut {
+struct LUA_RTMIDI_LOCAL ChannelOut {
 	RtMidiOut *output;
 	int index;
 
@@ -16,5 +17,5 @@ struct ChannelOut {
 	}
 };
 
-extern ChannelOut &getChannelOut(lua_State *L, int index);
-extern int ChannelOut_register(lua_State *L);
+extern LUA_RTMIDI_LOCAL ChannelOut &getChannelOut(lua_State *L, int index);
+extern LUA_RTMIDI_LOCAL int ChannelOut_register(lua_State *L);

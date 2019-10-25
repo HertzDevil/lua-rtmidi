@@ -120,10 +120,6 @@ int RtMidiError_register(lua_State *L) {
 	return 1;
 }
 
-extern "C" {
-
-__declspec(dllexport) int luaopen_luartmidi_rtmidierror(lua_State *L) {
+int luaopen_luartmidi_rtmidierror(lua_State *L) {
 	return RtMidiError_register(L);
-}
-
 }
