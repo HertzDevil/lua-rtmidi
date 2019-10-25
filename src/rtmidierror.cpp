@@ -75,12 +75,12 @@ const std::pair<RtMidiError::Type, const char *> RTMIDIERROR_TYPE_VALUES[] = {
 
 } // namespace
 
-RtMidiError &getRtMidiError(lua_State *L, int index) {
+LUA_RTMIDI_LOCAL RtMidiError &getRtMidiError(lua_State *L, int index) {
 	luaL_getmetatable(L, MT_RTMIDIERROR);
 	return luaGetUserdata<RtMidiError>(L, index, "RtMidiError");
 }
 
-int RtMidiError_register(lua_State *L) {
+LUA_RTMIDI_LOCAL int RtMidiError_register(lua_State *L) {
 	// instance methods
 	if (luaL_newmetatable(L, MT_RTMIDIERROR)) {
 		lua_pushliteral(L, "__index");
@@ -120,6 +120,6 @@ int RtMidiError_register(lua_State *L) {
 	return 1;
 }
 
-int luaopen_luartmidi_rtmidierror(lua_State *L) {
+extern "C" LUA_RTMIDI_API int luaopen_luartmidi_rtmidierror(lua_State *L) {
 	return RtMidiError_register(L);
 }

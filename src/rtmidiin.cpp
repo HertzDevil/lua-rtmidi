@@ -123,12 +123,12 @@ const luaL_Reg RtMidiIn_mt_index[] = {
 
 } // namespace
 
-RtMidiIn &getRtMidiIn(lua_State *L, int index) {
+LUA_RTMIDI_LOCAL RtMidiIn &getRtMidiIn(lua_State *L, int index) {
 	luaL_getmetatable(L, MT_RTMIDIIN);
 	return luaGetUserdata<RtMidiIn>(L, index, "RtMidiIn");
 }
 
-int RtMidiIn_register(lua_State *L) {
+LUA_RTMIDI_LOCAL int RtMidiIn_register(lua_State *L) {
 	// instance methods
 	if (luaL_newmetatable(L, MT_RTMIDIIN)) {
 		lua_pushliteral(L, "__index");
@@ -155,7 +155,7 @@ int RtMidiIn_register(lua_State *L) {
 	return 1;
 }
 
-int luaopen_luartmidi_rtmidiin(lua_State *L) {
+extern "C" LUA_RTMIDI_API int luaopen_luartmidi_rtmidiin(lua_State *L) {
 	lua_pop(L, RtMidi_register(L));
 	return RtMidiIn_register(L);
 }

@@ -191,12 +191,12 @@ const std::pair<RtMidi::Api, const char *> RTMIDI_API_VALUES[] = {
 
 
 
-RtMidi &getRtMidi(lua_State *L, int index) {
+LUA_RTMIDI_LOCAL RtMidi &getRtMidi(lua_State *L, int index) {
 	luaL_getmetatable(L, MT_RTMIDI);
 	return luaGetUserdata<RtMidi>(L, index, "RtMidi");
 }
 
-void RtMidi_init(RtMidi &midi, lua_State *L, int index) {
+LUA_RTMIDI_LOCAL void RtMidi_init(RtMidi &midi, lua_State *L, int index) {
 	midi.setErrorCallback(RtMidiDefaultErrorCallback, L);
 	RtMidi_callbacks[{&midi, L}] = LUA_NOREF;
 
@@ -208,7 +208,7 @@ void RtMidi_init(RtMidi &midi, lua_State *L, int index) {
 //	lua_pop(L, 1);
 }
 
-void RtMidi_gc(RtMidi &midi, lua_State *L) {
+LUA_RTMIDI_LOCAL void RtMidi_gc(RtMidi &midi, lua_State *L) {
 	auto it = RtMidi_callbacks.find({&midi, L});
 	if (it != RtMidi_callbacks.end()) {
 		luaL_unref(L, LUA_REGISTRYINDEX, it->second);
@@ -216,7 +216,7 @@ void RtMidi_gc(RtMidi &midi, lua_State *L) {
 	}
 }
 
-int RtMidi_register(lua_State *L) {
+LUA_RTMIDI_LOCAL int RtMidi_register(lua_State *L) {
 //	lua_pushlightuserdata(L, &REGISTRY_CALLBACK_ENABLED);
 //	lua_rawget(L, LUA_REGISTRYINDEX);
 //	if (!lua_istable(L, -1)) {
@@ -257,6 +257,6 @@ int RtMidi_register(lua_State *L) {
 	return 1;
 }
 
-int luaopen_luartmidi_rtmidi(lua_State *L) {
+extern "C" LUA_RTMIDI_API int luaopen_luartmidi_rtmidi(lua_State *L) {
 	return RtMidi_register(L);
 }

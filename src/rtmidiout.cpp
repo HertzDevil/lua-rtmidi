@@ -119,12 +119,12 @@ const luaL_Reg RtMidiOut_mt_index[] = {
 
 } // namespace
 
-RtMidiOut &getRtMidiOut(lua_State *L, int index) {
+LUA_RTMIDI_LOCAL RtMidiOut &getRtMidiOut(lua_State *L, int index) {
 	luaL_getmetatable(L, MT_RTMIDIOUT);
 	return luaGetUserdata<RtMidiOut>(L, index, "RtMidiOut");
 }
 
-int RtMidiOut_register(lua_State *L) {
+LUA_RTMIDI_LOCAL int RtMidiOut_register(lua_State *L) {
 	// reference counting for channel objects:
 	// each weakly counted ChannelOut object stores a strong ref to RtMidiOut
 	lua_pushlightuserdata(L, &REGISTRY_CHANNELOUT);
@@ -169,7 +169,7 @@ int RtMidiOut_register(lua_State *L) {
 	return 1;
 }
 
-int luaopen_luartmidi_rtmidiout(lua_State *L) {
+extern "C" LUA_RTMIDI_API int luaopen_luartmidi_rtmidiout(lua_State *L) {
 	lua_pop(L, ChannelOut_register(L));
 	lua_pop(L, RtMidi_register(L));
 	return RtMidiOut_register(L);
