@@ -1,6 +1,7 @@
 #include "rtmidiout.hpp"
 #include "channelout.hpp"
 #include "rtmidi.hpp"
+#include "rtmidierror.hpp"
 #include "util.hpp"
 
 namespace {
@@ -10,11 +11,21 @@ unsigned char REGISTRY_CHANNELOUT = 0;
 int RtMidiOut_ctor(lua_State *L) {
 	auto midiout = reinterpret_cast<RtMidiOut *>(
 	 lua_newuserdata(L, sizeof(RtMidiOut)));
-	new (midiout) RtMidiOut { };
-	RtMidi_init(*midiout, L, -1);
-	luaL_getmetatable(L, MT_RTMIDIOUT);
-	lua_setmetatable(L, -2);
-	return 1;
+	try {
+		new (midiout) RtMidiOut { };
+		RtMidi_init(*midiout, L, -1);
+		luaL_getmetatable(L, MT_RTMIDIOUT);
+		lua_setmetatable(L, -2);
+		return 1;
+	}
+	catch (RtMidiError &err) {
+		auto midierror = reinterpret_cast<RtMidiError *>(
+		 lua_newuserdata(L, sizeof(RtMidiError)));
+		new (midierror) RtMidiError {err};
+		luaL_getmetatable(L, MT_RTMIDIERROR);
+		lua_setmetatable(L, -2);
+		return lua_error(L);
+	}
 }
 
 int RtMidiOut_dtor(lua_State *L) {

@@ -1,5 +1,6 @@
 #include "rtmidiin.hpp"
 #include "rtmidi.hpp"
+#include "rtmidierror.hpp"
 #include "util.hpp"
 #include <map>
 
@@ -39,11 +40,22 @@ int RtMidiIn_callbackwrapper(lua_State *L) {
 int RtMidiIn_ctor(lua_State *L) {
 	auto midiin = reinterpret_cast<RtMidiIn *>(
 	 lua_newuserdata(L, sizeof(RtMidiIn)));
-	new (midiin) RtMidiIn { };
-	RtMidiIn_callbacks[{midiin, L}] = LUA_NOREF;
-	luaL_getmetatable(L, MT_RTMIDIIN);
-	lua_setmetatable(L, -2);
-	return 1;
+	try {
+		new (midiin) RtMidiIn { };
+		RtMidi_init(*midiin, L, -1);
+		RtMidiIn_callbacks[{midiin, L}] = LUA_NOREF;
+		luaL_getmetatable(L, MT_RTMIDIIN);
+		lua_setmetatable(L, -2);
+		return 1;
+	}
+	catch (RtMidiError &err) {
+		auto midierror = reinterpret_cast<RtMidiError *>(
+		 lua_newuserdata(L, sizeof(RtMidiError)));
+		new (midierror) RtMidiError {err};
+		luaL_getmetatable(L, MT_RTMIDIERROR);
+		lua_setmetatable(L, -2);
+		return lua_error(L);
+	}
 }
 
 int RtMidiIn_dtor(lua_State *L) {
