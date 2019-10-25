@@ -6,7 +6,7 @@
 #include <thread>
 #include <chrono>
 
-int luaopen_luartmidi(lua_State *L) {
+extern "C" LUA_RTMIDI_API int luaopen_luartmidi(lua_State *L) {
 	lua_createtable(L, 0, 4);
 
 	lua_pushliteral(L, "sleep");

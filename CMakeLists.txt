@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.12)
 project(lua-rtmidi)
 
 if(WIN32)
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
@@ -18,13 +20,13 @@ set(LUA_RTMIDI_SRCS
 )
 
 add_library(lua-rtmidi51 SHARED ${LUA_RTMIDI_SRCS})
-target_compile_definitions(lua-rtmidi51 PRIVATE LUA_RTMIDI_DLL)
+target_compile_definitions(lua-rtmidi51 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
 target_link_libraries(lua-rtmidi51 PRIVATE lua51 rtmidi)
 
 add_library(lua-rtmidi52 SHARED ${LUA_RTMIDI_SRCS})
-target_compile_definitions(lua-rtmidi52 PRIVATE LUA_RTMIDI_DLL)
+target_compile_definitions(lua-rtmidi52 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
 target_link_libraries(lua-rtmidi52 PRIVATE lua52 rtmidi)
 
 add_library(lua-rtmidi53 SHARED ${LUA_RTMIDI_SRCS})
-target_compile_definitions(lua-rtmidi53 PRIVATE LUA_RTMIDI_DLL)
+target_compile_definitions(lua-rtmidi53 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
 target_link_libraries(lua-rtmidi53 PRIVATE lua53 rtmidi)

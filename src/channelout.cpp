@@ -224,12 +224,12 @@ const luaL_Reg ChannelOut_mt_index[] = {
 
 } // namespace
 
-ChannelOut &getChannelOut(lua_State *L, int index) {
+LUA_RTMIDI_LOCAL ChannelOut &getChannelOut(lua_State *L, int index) {
 	return *reinterpret_cast<ChannelOut *>(
 	 luaL_checkudata(L, index, MT_CHANNELOUT));
 }
 
-int ChannelOut_register(lua_State *L) {
+LUA_RTMIDI_LOCAL int ChannelOut_register(lua_State *L) {
 	if (luaL_newmetatable(L, MT_CHANNELOUT)) {
 		lua_pushliteral(L, "__index");
 		luaNewLib(L, ChannelOut_mt_index);
