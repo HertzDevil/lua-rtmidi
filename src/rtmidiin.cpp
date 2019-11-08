@@ -106,7 +106,7 @@ int RtMidiIn_getmessage(lua_State *L) {
 	auto &self = getRtMidiIn(L, 1);
 	auto msg = std::vector<unsigned char> { };
 	double dt = self.getMessage(&msg);
-	if (dt == 0.0)
+	if (dt == 0.0 && msg.empty())
 		return 0;
 
 	auto n = msg.size();
