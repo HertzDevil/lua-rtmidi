@@ -3,8 +3,16 @@
 #include "rtmidiin.hpp"
 #include "rtmidiout.hpp"
 #include "rtmidierror.hpp"
-#include <thread>
 #include <chrono>
+
+/* Currently mingw-std-threads' sleep routines have significantly less overhead than winpthreads' */
+#ifdef USE_MINGW_THREADS
+	#include <mingw.thread.h>
+	namespace _this_thread = mingw_stdthread::this_thread;
+#else
+	#include <thread>
+	namespace _this_thread = std::this_thread;
+#endif
 
 extern "C" LUA_RTMIDI_API int luaopen_luartmidi(lua_State *L) {
 	lua_createtable(L, 0, 4);
@@ -12,7 +20,7 @@ extern "C" LUA_RTMIDI_API int luaopen_luartmidi(lua_State *L) {
 	lua_pushliteral(L, "sleep");
 	lua_pushcfunction(L, [] (lua_State *L) {
 		auto s = std::chrono::duration<lua_Number>(luaL_checknumber(L, 1));
-		std::this_thread::sleep_for(s);
+		_this_thread::sleep_for(s);
 		return 0;
 	});
 	lua_rawset(L, -3);
