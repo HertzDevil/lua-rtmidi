@@ -21,14 +21,28 @@ set(LUA_RTMIDI_SRCS
 	src/channelout.cpp
 )
 
-add_library(lua-rtmidi51 SHARED ${LUA_RTMIDI_SRCS})
-target_compile_definitions(lua-rtmidi51 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
-target_link_libraries(lua-rtmidi51 PRIVATE lua51 rtmidi)
+message(INFO "lua_ver: ${LUA_VERSION} / LUA_INDRI: ${LUA_INCDIR} / LIBFLAG: ${LIBFLAG} / LIBDIR: ${LIBDIR}")
 
-add_library(lua-rtmidi52 SHARED ${LUA_RTMIDI_SRCS})
-target_compile_definitions(lua-rtmidi52 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
-target_link_libraries(lua-rtmidi52 PRIVATE lua52 rtmidi)
+if (LIBDIR)
+  add_library(lua-rtmidi SHARED ${LUA_RTMIDI_SRCS})
 
-add_library(lua-rtmidi53 SHARED ${LUA_RTMIDI_SRCS})
-target_compile_definitions(lua-rtmidi53 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
-target_link_libraries(lua-rtmidi53 PRIVATE lua53 rtmidi)
+  target_compile_definitions(lua-rtmidi PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
+  target_include_directories(lua-rtmidi PRIVATE ${LUA_INCDIR})
+  target_link_libraries(lua-rtmidi PRIVATE rtmidi)
+
+  set_target_properties(lua-rtmidi PROPERTIES OUTPUT_NAME "luartmidi")
+  set_target_properties(lua-rtmidi PROPERTIES PREFIX "")
+  install(TARGETS lua-rtmidi DESTINATION ${LIBDIR})
+else()
+  add_library(lua-rtmidi51 SHARED ${LUA_RTMIDI_SRCS})
+  target_compile_definitions(lua-rtmidi51 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
+  target_link_libraries(lua-rtmidi51 PRIVATE lua51 rtmidi)
+
+  add_library(lua-rtmidi52 SHARED ${LUA_RTMIDI_SRCS})
+  target_compile_definitions(lua-rtmidi52 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
+  target_link_libraries(lua-rtmidi52 PRIVATE lua52 rtmidi)
+
+  add_library(lua-rtmidi53 SHARED ${LUA_RTMIDI_SRCS})
+  target_compile_definitions(lua-rtmidi53 PRIVATE LUA_RTMIDI_DLL LUA_RTMIDI_DLL_EXPORTS)
+  target_link_libraries(lua-rtmidi53 PRIVATE lua53 rtmidi)
+endif()
