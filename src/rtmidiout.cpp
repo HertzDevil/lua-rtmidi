@@ -9,13 +9,12 @@ namespace {
 unsigned char REGISTRY_CHANNELOUT = 0;
 
 int RtMidiOut_ctor(lua_State *L) {
+	auto name = luaL_optstring(L, 2, "Lua RtMidi Input");
+	auto api = static_cast<RtMidi::Api>(luaL_optinteger(L, 3, RtMidi::Api::UNSPECIFIED));
 	auto midiout = reinterpret_cast<RtMidiOut *>(
 	 lua_newuserdata(L, sizeof(RtMidiOut)));
 	try {
-		RtMidi::Api api = RtMidi::Api::UNSPECIFIED;
-		if (lua_gettop(L) > 2)
-			api = (RtMidi::Api) luaL_checkinteger(L, 2);
-		new (midiout) RtMidiOut { api };
+		new (midiout) RtMidiOut { api, name };
 		RtMidi_init(*midiout, L, -1);
 		luaL_getmetatable(L, MT_RTMIDIOUT);
 		lua_setmetatable(L, -2);

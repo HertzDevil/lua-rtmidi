@@ -46,10 +46,17 @@ Returns a descriptive name of the API with the specified `RtMidi.Api` value.
 Returns the `RtMidi.Api` value of the API with the specified name.
 
 ## Instance methods
+`RtMidi` cannot be directly instantiated, but `RtMidiIn` and `RtMidiOut` inherit these methods.
 
-### openport (port = 1)
+### openport (port = 1, name)
 
 Opens the input or output port with the given 1-based port number.
+`name` is an optional string that names this port.
+
+### openvirtualport (name)
+
+Opens a virtual port. Virtual ports generally have to be connected to from another application.
+`name` is an optional string that names this port.
 
 ### getportcount ()
 
