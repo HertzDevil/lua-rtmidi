@@ -12,7 +12,10 @@ int RtMidiOut_ctor(lua_State *L) {
 	auto midiout = reinterpret_cast<RtMidiOut *>(
 	 lua_newuserdata(L, sizeof(RtMidiOut)));
 	try {
-		new (midiout) RtMidiOut { };
+		RtMidi::Api api = RtMidi::Api::UNSPECIFIED;
+		if (lua_gettop(L) > 2)
+			api = (RtMidi::Api) luaL_checkinteger(L, 2);
+		new (midiout) RtMidiOut { api };
 		RtMidi_init(*midiout, L, -1);
 		luaL_getmetatable(L, MT_RTMIDIOUT);
 		lua_setmetatable(L, -2);

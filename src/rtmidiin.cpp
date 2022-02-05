@@ -41,7 +41,10 @@ int RtMidiIn_ctor(lua_State *L) {
 	auto midiin = reinterpret_cast<RtMidiIn *>(
 	 lua_newuserdata(L, sizeof(RtMidiIn)));
 	try {
-		new (midiin) RtMidiIn { };
+		RtMidi::Api api = RtMidi::Api::UNSPECIFIED;
+		if (lua_gettop(L) > 2)
+			api = (RtMidi::Api) luaL_checkinteger(L, 2);
+		new (midiin) RtMidiIn{ api };
 		RtMidi_init(*midiin, L, -1);
 		RtMidiIn_callbacks[{midiin, L}] = LUA_NOREF;
 		luaL_getmetatable(L, MT_RTMIDIIN);
