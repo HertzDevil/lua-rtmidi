@@ -1,8 +1,9 @@
 package = "lua-rtmidi"
 rockspec_format = "3.0"
-version = "dev-1"
+version = "1.0.0-1"
 source = {
-   url = "git+https://github.com/s-ol/lua-rtmidi"
+   url = "git+https://github.com/s-ol/lua-rtmidi",
+   tag = "v1.0.0"
 }
 description = {
    summary = "Lua bindings for RtMidi.",
