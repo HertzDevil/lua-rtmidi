@@ -4,9 +4,11 @@ MIDI output class.
 
 ## Constructor
 
-### RtMidiOut ()
+### RtMidiOut (client_name, api)
 
 Constructs a MIDI output object.
+`client_name` is an optional string to name the application instance and group ports.
+`api` is an optional [`RtMidi.Api`](./luartmidi.rtmidi.md) value to choose the API to use.
 
 ## Instance methods
 

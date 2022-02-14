@@ -4,9 +4,11 @@ MIDI input class.
 
 ## Constructor
 
-### RtMidiIn ()
+### RtMidiIn (client_name, api)
 
 Constructs a MIDI input object.
+`name` is an optional string to name the application instance and group ports.
+`api` is an optional [`RtMidi.Api`](./luartmidi.rtmidi.md) value to choose the API to use.
 
 ## Instance methods
 

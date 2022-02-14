@@ -58,7 +58,16 @@ int RtMidi_callbackwrapper(lua_State *L) {
 
 int RtMidi_openport(lua_State *L) {
 	auto &self = getRtMidi(L, 1);
-	self.openPort(static_cast<unsigned>(luaL_optinteger(L, 2, 1)) - 1);
+	auto port = static_cast<unsigned>(luaL_optinteger(L, 2, 1)) - 1;
+	auto name = luaL_optstring(L, 3, "RtMidi");
+	self.openPort(port, name);
+	return 0;
+}
+
+int RtMidi_openvirtualport(lua_State *L) {
+	auto &self = getRtMidi(L, 1);
+	const char* name = luaL_optstring(L, 2, "RtMidi");
+	self.openVirtualPort(name);
 	return 0;
 }
 
@@ -114,7 +123,7 @@ int RtMidi_seterrorcallback(lua_State *L) {
 const luaL_Reg RtMidi_mt_index[] = {
 	// virtual method wrappers
 	METHOD(openport),
-//	METHOD(openvirtualport),
+	METHOD(openvirtualport),
 	METHOD(getportcount),
 	METHOD(getportname),
 	METHOD(closeport),

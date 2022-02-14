@@ -38,10 +38,12 @@ int RtMidiIn_callbackwrapper(lua_State *L) {
 }
 
 int RtMidiIn_ctor(lua_State *L) {
+	auto name = luaL_optstring(L, 2, "Lua RtMidi Input");
+	auto api = static_cast<RtMidi::Api>(luaL_optinteger(L, 3, RtMidi::Api::UNSPECIFIED));
 	auto midiin = reinterpret_cast<RtMidiIn *>(
 	 lua_newuserdata(L, sizeof(RtMidiIn)));
 	try {
-		new (midiin) RtMidiIn { };
+		new (midiin) RtMidiIn{ api, name };
 		RtMidi_init(*midiin, L, -1);
 		RtMidiIn_callbacks[{midiin, L}] = LUA_NOREF;
 		luaL_getmetatable(L, MT_RTMIDIIN);
